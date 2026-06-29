@@ -1,7 +1,7 @@
 import { request, type APIRequestContext } from '@playwright/test';
 
 const API = (process.env.E2E_API_URL ?? 'http://localhost:3000').replace(
-  /\/+$/,
+  /\/$/,
   '',
 );
 
@@ -27,8 +27,8 @@ export async function createTodoViaApi(
   title: string,
   description?: string,
 ): Promise<{ id: string; title: string; description: string | null }> {
-  const ctx = await request.newContext({ baseURL: API });
-  const res = await ctx.post('/todos', {
+  const ctx = await request.newContext();
+  const res = await ctx.post(`${API}/todos`, {
     data: { title, ...(description ? { description } : {}) },
   });
   if (!res.ok()) {

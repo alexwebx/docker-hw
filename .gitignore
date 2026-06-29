@@ -2,7 +2,7 @@
 .idea/
 node_modules
 test-results
-
+docs/
 
 # committed: .env.development.* (local docker creds only)
 # ignored: anything that might hold real secrets

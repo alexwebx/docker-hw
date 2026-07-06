@@ -15,10 +15,12 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   back:
-    image: ${DOCKERHUB_USERNAME}/todo-back:${IMAGE_TAG}
+    image: ${DOCKERHUB_USERNAME}/todo-back:${APP_VERSION}
     restart: unless-stopped
     platform: linux/amd64
     env_file: .env.development.back
+    environment:
+      APP_VERSION: ${APP_VERSION}
     depends_on:
       db:
         condition: service_healthy
@@ -28,7 +30,7 @@ services:
       - ./app-config:/app/config:ro
 
   front:
-    image: ${DOCKERHUB_USERNAME}/todo-front:${IMAGE_TAG}
+    image: ${DOCKERHUB_USERNAME}/todo-front:${APP_VERSION}
     restart: unless-stopped
     platform: linux/amd64
     ports:

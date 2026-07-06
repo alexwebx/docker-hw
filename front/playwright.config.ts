@@ -10,6 +10,7 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:5173',
+    proxy: process.env.PLAYWRIGHT_PROXY ? { server: process.env.PLAYWRIGHT_PROXY } : undefined,
     trace: 'on-first-retry',
   },
   projects: [

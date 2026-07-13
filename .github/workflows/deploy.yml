@@ -66,6 +66,11 @@ jobs:
           E2E_BASE_URL: ${{ vars.VITE_API_URL }}
         run: |
           export E2E_BASE_URL="${E2E_BASE_URL%/api}"
+          for i in $(seq 1 10); do
+            curl -sf "${E2E_BASE_URL}/api/health" && break
+            echo "Waiting for backend... ($i/10)"
+            sleep 5
+          done
           bash scripts/smoke.sh
 
   notify:

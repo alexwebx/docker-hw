@@ -12,7 +12,6 @@ jobs:
     needs: [checks]
     runs-on: ubuntu-latest
     outputs:
-      image: ${{ steps.bp.outputs.image }}
       version: ${{ steps.bp.outputs.version }}
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +26,6 @@ jobs:
           docker build --platform linux/amd64 -t $IMAGE -t ${{ secrets.DOCKER_USER }}/todo-back:latest back
           docker push $IMAGE
           docker push ${{ secrets.DOCKER_USER }}/todo-back:latest
-          echo "image=$IMAGE" >> $GITHUB_OUTPUT
           echo "version=sha-${{ github.sha }}" >> $GITHUB_OUTPUT
 
   deploy:
@@ -46,7 +44,7 @@ jobs:
 
       - name: Deploy to k3s
         env:
-          IMAGE: ${{ needs.build.outputs.image }}
+          IMAGE: ${{ secrets.DOCKER_USER }}/todo-back:${{ needs.build.outputs.version }}
           APP_VERSION: ${{ needs.build.outputs.version }}
         run: |
           envsubst < k8s/backend.yaml | kubectl apply -f -
